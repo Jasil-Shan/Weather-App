@@ -19,6 +19,21 @@ const Weather = () => {
                 <img src={search} alt="" />
             </div>
         </div>
+        <div className="weather-image">
+            <img src={cloud} alt="" />
+        </div>
+        <div className="weather-temp">24c</div>
+        <div className="weather-location">Payyoli</div>
+        <div className="data-container">
+            <div className="element">
+                <img src="" alt="" />
+                <div className="data">
+                    <div className="humidity-percent">64%</div>
+                    
+                </div>
+            </div>
+        </div>
+
 
     </div>
   )
