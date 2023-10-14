@@ -12,7 +12,15 @@ import wind from '../assets/wind.png'
 
 const Weather = () => {
   return (
-    <div>Weather</div>
+    <div className='container'>
+        <div className="top-bar">
+            <input type="text" className='cityInput' name="" id=""  placeholder='Search'/>
+            <div className="search-icon">
+                <img src={search} alt="" />
+            </div>
+        </div>
+
+    </div>
   )
 }
 
