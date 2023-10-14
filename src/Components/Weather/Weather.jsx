@@ -7,36 +7,71 @@ import humidity from '../assets/humidity.png'
 import rain from '../assets/rain.png'
 import snow from '../assets/snow.png'
 import wind from '../assets/wind.png'
+import { useState } from 'react'
 
 
 
 const Weather = () => {
-  return (
-    <div className='container'>
-        <div className="top-bar">
-            <input type="text" className='cityInput' name="" id=""  placeholder='Search'/>
-            <div className="search-icon">
-                <img src={search} alt="" />
-            </div>
-        </div>
-        <div className="weather-image">
-            <img src={cloud} alt="" />
-        </div>
-        <div className="weather-temp">24c</div>
-        <div className="weather-location">Payyoli</div>
-        <div className="data-container">
-            <div className="element">
-                <img src="" alt="" />
-                <div className="data">
-                    <div className="humidity-percent">64%</div>
-                    
+
+    const [value, setValue] = useState('')
+    const [data, setData] = useState('')
+    const [weatherIcon, setIcon] = useState('')
+
+    let api_key = "b7e706f7cae673fc3674f559a13d6342"
+
+    const handleSearch = async () => {
+
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${value}&units=Metric&appid=${api_key}`)
+        let data = await response.json()
+        console.log(data);
+        setData(data)
+        if(data?.weather[0]?.main == 'Rain'){
+            setIcon(rain)
+        }else if(data?.weather[0]?.main == 'Clouds'){
+            setIcon(cloud)
+        }else if(data?.weather[0]?.main == 'Snow'){
+            setIcon(snow)
+        }
+        else if(data?.weather[0]?.main == 'Drizzle'){
+            setIcon(drizzle)
+        }
+    }
+
+    return (
+        <div className='container'>
+            <div className="top-bar">
+                <input type="text" className='cityInput' value={value} onChange={(e) => setValue(e.target.value)} placeholder='Search' />
+                <div className="search-icon">
+                    <img src={search} alt="" onClick={() => { handleSearch() }} />
                 </div>
             </div>
+            <div className="weather-image">
+                <img src={weatherIcon|| clear} alt="" />
+            </div>
+            <div className="weather-temp">{Math.floor(data?.main?.temp) || 0 } °C</div>
+            <div className="weather-location">{data?.name || 'Location' }</div>
+            <div className="data-container">
+                <div className="element">
+                    <img src={humidity} alt="" />
+                    <div className="data">
+                        <div className="humidity-percent">{Math.floor(data?.main?.humidity) || 0 }%</div>
+                        <div className="text">Humidity</div>
+
+                    </div>
+                </div>
+                <div className="element">
+                    <img src={wind} alt="" />
+                    <div className="data">
+                        <div className="humidity-percent">{Math.floor(data?.wind?.speed) || 0 }km/hour</div>
+                        <div className="text">Wind Speed</div>
+
+                    </div>
+                </div>
+            </div>
+
+
         </div>
-
-
-    </div>
-  )
+    )
 }
 
 export default Weather
