@@ -42,6 +42,9 @@ const Weather = () => {
         else if(data?.weather[0]?.main == 'Drizzle'){
             setIcon(drizzle)
         }
+        else if(data?.weather[0]?.main == 'Clear'){
+            setIcon(clear)
+        }
     }
 
     return (
