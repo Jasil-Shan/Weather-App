@@ -14,6 +14,7 @@ import { useState } from 'react'
 const Weather = () => {
 
     const [value, setValue] = useState('')
+    const [error, setError] = useState(null)
     const [data, setData] = useState('')
     const [weatherIcon, setIcon] = useState('')
 
@@ -23,6 +24,12 @@ const Weather = () => {
 
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${value}&units=Metric&appid=${api_key}`)
         let data = await response.json()
+        if (!response.ok) {
+            setError(<div className="error-message" style={{ color: 'red', paddingTop: '60px', fontWeight: 'bold', }}>Oops..! Location not found or unavailable.</div>);
+            return;
+        }else{
+            setError(null)
+        }
         console.log(data);
         setData(data)
         if(data?.weather[0]?.main == 'Rain'){
@@ -45,16 +52,17 @@ const Weather = () => {
                     <img src={search} alt="" onClick={() => { handleSearch() }} />
                 </div>
             </div>
+            {error && <div className="error-message">{error}</div>}
             <div className="weather-image">
                 <img src={weatherIcon|| clear} alt="" />
             </div>
-            <div className="weather-temp">{Math.floor(data?.main?.temp) || 0 } °C</div>
-            <div className="weather-location">{data?.name || 'Location' }</div>
+            <div className="weather-temp">{Math.floor(data?.main?.temp) || 24 }°C</div>
+            <div className="weather-location">{data?.name || 'London' }</div>
             <div className="data-container">
                 <div className="element">
                     <img src={humidity} alt="" />
                     <div className="data">
-                        <div className="humidity-percent">{Math.floor(data?.main?.humidity) || 0 }%</div>
+                        <div className="humidity-percent">{Math.floor(data?.main?.humidity) || 64 }%</div>
                         <div className="text">Humidity</div>
 
                     </div>
@@ -62,7 +70,7 @@ const Weather = () => {
                 <div className="element">
                     <img src={wind} alt="" />
                     <div className="data">
-                        <div className="humidity-percent">{Math.floor(data?.wind?.speed) || 0 }km/hour</div>
+                        <div className="humidity-percent">{Math.floor(data?.wind?.speed) || 2 }km/hour</div>
                         <div className="text">Wind Speed</div>
 
                     </div>
